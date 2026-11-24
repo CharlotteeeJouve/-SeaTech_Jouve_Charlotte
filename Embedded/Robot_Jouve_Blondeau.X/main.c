@@ -5,6 +5,8 @@
 #include "IO.h"
 #include "timer.h"
 #include "PWM.h"
+#include "ADC.h"
+
 int main (void){
     //Initialisation oscillateur
     InitOscillator();
@@ -17,8 +19,11 @@ int main (void){
     InitTimer1();
     
     InitPWM();
-    PWMSetSpeed(10);
-    
+    PWMSetSpeedConsigne(37,MOTEUR_GAUCHE);
+    PWMSetSpeedConsigne(37,MOTEUR_DROIT);
+            
+    InitADC1();
+            
     LED_BLANCHE_1 = 1;
     LED_BLEUE_1 = 1;
     LED_ORANGE_1 = 1;
@@ -36,7 +41,13 @@ int main (void){
     /***********************************************************************************************/
     while(1)
     {  
-        //LED_BLANCHE_1 = !LED_BLANCHE_1;
+        if(ADCIsConversionFinished() == 1){
+            unsigned int * result = ADCGetResult();
+            ADCValue0 = result[0];
+            ADCValue1 = result[1];
+            ADCValue2 = result[2];
+            return 
+        }
         
     } // fin main//
 }
